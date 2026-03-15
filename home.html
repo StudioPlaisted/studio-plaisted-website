@@ -11,12 +11,16 @@
   <meta property="og:description" content="Architecture and interiors practice based in East Fremantle, Western Australia.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://studioplaisted.com">
-  <meta property="og:image" content="https://studioplaisted.com/images/hero.jpg">
+  <meta property="og:image" content="https://studioplaisted.com/images/og-image.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Studio Plaisted — Architecture and Interiors">
   <meta name="twitter:description" content="Architecture and interiors practice based in East Fremantle, Western Australia.">
-  <meta name="twitter:image" content="https://studioplaisted.com/images/hero.jpg">
+  <meta name="twitter:image" content="https://studioplaisted.com/images/og-image.jpg">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
   <link rel="canonical" href="https://studioplaisted.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,7 +29,7 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Architect",
+    "@type": ["Architect", "LocalBusiness"],
     "name": "Studio Plaisted",
     "description": "Architecture and interiors practice based in East Fremantle, Western Australia. Led by registered architect Fiona Plaisted.",
     "url": "https://studioplaisted.com",
@@ -96,7 +100,10 @@
     </section>
 
     <section class="hero-image">
-      <img src="images/hero.jpg" alt="Studio Plaisted">
+      <picture>
+        <source srcset="images/hero.webp" type="image/webp">
+        <img src="images/hero.jpg" alt="Studio Plaisted">
+      </picture>
     </section>
     <section class="section home-services">
       <div class="container">
@@ -126,7 +133,10 @@
             <a href="studio.html" class="cta-link">About the studio</a>
           </div>
           <div class="col-image">
-            <img src="images/portrait.jpeg" alt="Fiona Plaisted — Registered Architect">
+            <picture>
+              <source srcset="images/portrait.webp" type="image/webp">
+              <img src="images/portrait.jpeg" alt="Fiona Plaisted — Registered Architect" loading="lazy">
+            </picture>
           </div>
         </div>
       </div>

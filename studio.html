@@ -15,6 +15,10 @@
   <meta name="twitter:description" content="Meet Fiona Plaisted, registered architect and founder of Studio Plaisted in East Fremantle, WA.">
   <meta name="twitter:image" content="https://studioplaisted.com/images/portrait.jpeg">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="manifest" href="site.webmanifest">
   <link rel="canonical" href="https://studioplaisted.com/studio">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -69,6 +73,16 @@
     }
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://studioplaisted.com"},
+      {"@type": "ListItem", "position": 2, "name": "About", "item": "https://studioplaisted.com/studio"}
+    ]
+  }
+  </script>
 </head>
 <body>
   <a href="#main-content" class="skip-link">Skip to content</a>
@@ -103,7 +117,10 @@
     </section>
 
     <section class="hero-image">
-      <img src="images/studio-hero.jpg" alt="Studio Plaisted — Western Australian landscape">
+      <picture>
+        <source srcset="images/studio-hero.webp" type="image/webp">
+        <img src="images/studio-hero.jpg" alt="Studio Plaisted — Western Australian landscape">
+      </picture>
     </section>
 
     <section class="section studio-approach">
@@ -128,7 +145,10 @@
             <p class="credentials"><strong>Fiona Plaisted</strong>, Director<br>Registered Architect (ABWA)<br>Member, Australian Institute of Architects (RAIA)<br>Diploma of Building Design, Central Institute of Technology<br>Master of Architecture (Hons), RMIT University</p>
           </div>
           <div class="col-image">
-            <img src="images/portrait.jpeg" alt="Fiona Plaisted — Registered Architect">
+            <picture>
+              <source srcset="images/portrait.webp" type="image/webp">
+              <img src="images/portrait.jpeg" alt="Fiona Plaisted — Registered Architect" loading="lazy">
+            </picture>
           </div>
         </div>
       </div>

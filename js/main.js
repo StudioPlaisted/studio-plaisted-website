@@ -83,3 +83,42 @@ document.querySelectorAll('.step-header').forEach((header) => {
     }
   });
 });
+
+// Contact form — async submit with inline feedback
+const contactForm = document.querySelector('.contact-form');
+if (contactForm) {
+  contactForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const msg = document.getElementById('form-message');
+    const btn = contactForm.querySelector('.form-submit');
+    const originalText = btn.textContent;
+
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    msg.className = 'form-message';
+    msg.textContent = '';
+
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(contactForm)).toString()
+    })
+    .then(function (res) {
+      if (res.ok) {
+        msg.className = 'form-message success';
+        msg.textContent = 'Thank you — we\'ll be in touch soon.';
+        contactForm.reset();
+      } else {
+        throw new Error('Server returned ' + res.status);
+      }
+    })
+    .catch(function () {
+      msg.className = 'form-message error';
+      msg.textContent = 'Something went wrong. Please email us directly at hello@studioplaisted.com';
+    })
+    .finally(function () {
+      btn.textContent = originalText;
+      btn.disabled = false;
+    });
+  });
+}

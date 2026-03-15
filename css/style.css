@@ -786,6 +786,27 @@ main > section:last-child {
   opacity: 0.85;
 }
 
+/* Form messages */
+.form-message {
+  padding: 16px;
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  display: none;
+}
+.form-message.success {
+  display: block;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--white);
+}
+.form-message.error {
+  display: block;
+  background: rgba(200, 50, 50, 0.15);
+  border: 1px solid rgba(200, 50, 50, 0.4);
+  color: var(--white);
+}
+
 /* Honeypot for spam */
 .form-hp {
   position: absolute;
@@ -1010,5 +1031,130 @@ main > section:last-child {
 @media (max-width: 480px) {
   .footer-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* --- Print --- */
+@media print {
+  /* Hide non-content elements */
+  .nav,
+  .menu-toggle,
+  .dot-overlay,
+  .skip-link,
+  .acknowledgement,
+  .footer,
+  .form-hp,
+  .form-submit,
+  .cta-link,
+  .cta-box,
+  .project-status {
+    display: none !important;
+  }
+
+  /* Reset colours for print */
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11pt;
+    line-height: 1.5;
+  }
+
+  * {
+    color: #000 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Remove top margin that accounts for fixed nav */
+  main > section:first-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  /* Images print sensibly */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+
+  .hero-image {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .hero-image img {
+    height: auto !important;
+    max-height: 400px;
+    object-fit: contain;
+  }
+
+  /* Links show their URL */
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 9pt;
+    font-weight: 300;
+    word-break: break-all;
+  }
+
+  /* But not nav/logo links */
+  .logo a::after,
+  .nav a::after {
+    content: none;
+  }
+
+  /* Grid layouts flow single-column for print */
+  .two-col-text-image,
+  .contact-grid,
+  .footer-grid,
+  .projects-grid {
+    display: block !important;
+  }
+
+  .two-col-text-image > *,
+  .contact-grid > *,
+  .projects-grid > * {
+    margin-bottom: 24pt;
+  }
+
+  /* Services timeline prints linearly */
+  .timeline-item {
+    border: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 16pt;
+  }
+
+  .step-content {
+    display: block !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Avoid page breaks inside key elements */
+  h1, h2, h3, h4 {
+    page-break-after: avoid;
+  }
+
+  .project-card,
+  .service-card,
+  .detail-group {
+    page-break-inside: avoid;
+  }
+
+  /* Borders visible in print */
+  .service-item,
+  .timeline-item {
+    border-color: #ccc !important;
+  }
+
+  /* Section spacing for print */
+  section {
+    margin-bottom: 24pt !important;
+    padding: 16pt 0 !important;
+  }
+
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
   }
 }
