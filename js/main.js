@@ -98,10 +98,11 @@ if (contactForm) {
     msg.className = 'form-message';
     msg.textContent = '';
 
-    fetch('/contact.html', {
+    var formData = new FormData(contactForm);
+    fetch(contactForm.getAttribute('action') || window.location.pathname, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(new FormData(contactForm)).toString()
+      body: new URLSearchParams(formData).toString()
     })
     .then(function (res) {
       if (res.ok) {
