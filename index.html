@@ -11,7 +11,12 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://studioplaisted.com">
   <meta property="og:image" content="https://studioplaisted.com/images/hero.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Studio Plaisted — Architecture and Interiors">
+  <meta name="twitter:description" content="Architecture and interiors practice based in East Fremantle, Western Australia.">
+  <meta name="twitter:image" content="https://studioplaisted.com/images/hero.jpg">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="canonical" href="https://studioplaisted.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
@@ -115,7 +120,29 @@
       <div class="line"></div>
       <span>Plaisted</span>
     </div>
+    <div class="splash-cue">enter</div>
   </div>
+  <style>
+    .splash-cue {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-family: 'Outfit', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 300;
+      letter-spacing: 0.15em;
+      opacity: 0.7;
+      animation: pulse 2s ease-in-out infinite;
+      cursor: pointer;
+      z-index: 10;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.9; }
+    }
+  </style>
   <script>
     var splash = document.querySelector('.splash');
     document.addEventListener('wheel', function(e) {
