@@ -33,7 +33,7 @@
   --terracotta: #954d14;
   --white: #FFFFFF;
   --text-primary: #FFFFFF;
-  --text-muted: rgba(255, 255, 255, 0.6);
+  --text-muted: rgba(255, 255, 255, 0.8);
   --border-color: rgba(255, 255, 255, 0.15);
   --font-body: 'Outfit', sans-serif;
   --font-heading: 'Salmond', 'Noto Serif', Georgia, serif;
@@ -340,6 +340,7 @@ p {
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
+  object-position: center 30%;
   display: block;
 }
 
@@ -379,6 +380,10 @@ p {
   font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.6;
+}
+.footer-grid a {
+  display: inline-block;
+  padding: 4px 0;
 }
 
 .footer-grid a:hover {
