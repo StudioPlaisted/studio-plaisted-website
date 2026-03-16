@@ -1,6 +1,7 @@
 # Clean URLs — match sitemap paths to actual files
 /home        /home.html       200
-/studio      /studio.html     200
+/about       /about.html      200
+/studio      /about           301
 /services    /services.html   200
 /projects    /projects.html   200
 /contact     /contact.html    200
