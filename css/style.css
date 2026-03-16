@@ -338,10 +338,11 @@ p {
 
 .two-col-text-image .col-image img {
   width: 100%;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: center 30%;
   display: block;
+  max-height: 500px;
 }
 
 /* --- Acknowledgement of Country --- */
