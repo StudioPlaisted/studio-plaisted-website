@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Instagram Triptych Generator — Studio Plaisted</title>
+  <style>
+    @font-face {
+      font-family: 'Salmond';
+      src: url('fonts/Salmond-Semibold.woff') format('woff');
+      font-weight: 600;
+      font-style: normal;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #1a1a1a;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      color: #999;
+      text-align: center;
+    }
+    .instructions {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .instructions strong { color: #ccc; }
+    h2 {
+      font-size: 11px;
+      font-weight: 400;
+      color: #666;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 40px 0 16px;
+      text-align: center;
+    }
+
+    /* --- Instagram Grid Simulation (3:4 portrait thumbnails) --- */
+    .ig-grid-sim {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ig-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #222;
+    }
+    .ig-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #954d14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .ig-username {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .ig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px;
+      padding: 3px 0;
+    }
+    .ig-grid-cell {
+      aspect-ratio: 3 / 4;
+      overflow: hidden;
+      position: relative;
+    }
+    .ig-grid-cell canvas {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      /* Scale to cover the 3:4 cell — crop sides */
+      height: 100%;
+      width: auto;
+      min-width: 100%;
+    }
+    .ig-grid-label {
+      text-align: center;
+      padding: 12px;
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 0.08em;
+    }
+
+    /* --- Individual Feed Simulation (full 4:5 post) --- */
+    .ig-feed-sim {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .ig-feed-post {
+      border-bottom: 1px solid #222;
+    }
+    .ig-feed-post:last-child { border-bottom: none; }
+    .ig-feed-header {
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .ig-feed-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #954d14;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .ig-feed-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .ig-feed-post canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .ig-feed-actions {
+      padding: 10px 14px 14px;
+      display: flex;
+      gap: 14px;
+    }
+    .ig-feed-icon {
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid #666;
+      border-radius: 4px;
+    }
+    .ig-feed-post-label {
+      text-align: center;
+      font-size: 10px;
+      color: #444;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 0 0;
+    }
+
+    /* --- Download --- */
+    .download-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 30px 0 10px;
+      flex-wrap: wrap;
+    }
+    button {
+      background: #954d14;
+      color: #fff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #b35e1a; }
+    .note {
+      text-align: center;
+      font-size: 11px;
+      color: #444;
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    .source-canvases { display: none; }
+  </style>
+</head>
+<body>
+
+  <h1>Instagram Triptych</h1>
+  <div class="instructions">
+    <strong>Post in this order:</strong> Post 3 first, then Post 2, then Post 1.<br>
+    Images are 1080 &times; 1350px (4:5 portrait). Instagram grid crops to 3:4 — both views simulated below.
+  </div>
+
+  <!-- Hidden full-res source canvases -->
+  <div class="source-canvases">
+    <canvas id="tile1" width="1080" height="1350"></canvas>
+    <canvas id="tile2" width="1080" height="1350"></canvas>
+    <canvas id="tile3" width="1080" height="1350"></canvas>
+  </div>
+
+  <!-- GRID SIMULATION (3:4 cropped thumbnails) -->
+  <h2>Profile grid (3:4 crop with gaps)</h2>
+  <div class="ig-grid-sim">
+    <div class="ig-header">
+      <div class="ig-avatar">SP</div>
+      <div class="ig-username">studioplaisted</div>
+    </div>
+    <div class="ig-grid">
+      <div class="ig-grid-cell"><canvas id="grid1" width="1080" height="1350"></canvas></div>
+      <div class="ig-grid-cell"><canvas id="grid2" width="1080" height="1350"></canvas></div>
+      <div class="ig-grid-cell"><canvas id="grid3" width="1080" height="1350"></canvas></div>
+    </div>
+    <div class="ig-grid-label">Grid preview — 3:4 crop, 3px gaps (exactly like Instagram)</div>
+  </div>
+
+  <!-- FEED SIMULATION (full 4:5 posts) -->
+  <h2>Individual posts in feed (full image, no crop)</h2>
+  <div class="ig-feed-sim">
+    <div class="ig-feed-post">
+      <div class="ig-feed-header">
+        <div class="ig-feed-avatar">SP</div>
+        <div class="ig-feed-name">studioplaisted</div>
+      </div>
+      <canvas id="feed1" width="1080" height="1350"></canvas>
+      <div class="ig-feed-actions">
+        <div class="ig-feed-icon"></div><div class="ig-feed-icon"></div><div class="ig-feed-icon"></div>
+      </div>
+      <div class="ig-feed-post-label">Post 1 — post last</div>
+    </div>
+    <div class="ig-feed-post">
+      <div class="ig-feed-header">
+        <div class="ig-feed-avatar">SP</div>
+        <div class="ig-feed-name">studioplaisted</div>
+      </div>
+      <canvas id="feed2" width="1080" height="1350"></canvas>
+      <div class="ig-feed-actions">
+        <div class="ig-feed-icon"></div><div class="ig-feed-icon"></div><div class="ig-feed-icon"></div>
+      </div>
+      <div class="ig-feed-post-label">Post 2 — post second</div>
+    </div>
+    <div class="ig-feed-post">
+      <div class="ig-feed-header">
+        <div class="ig-feed-avatar">SP</div>
+        <div class="ig-feed-name">studioplaisted</div>
+      </div>
+      <canvas id="feed3" width="1080" height="1350"></canvas>
+      <div class="ig-feed-actions">
+        <div class="ig-feed-icon"></div><div class="ig-feed-icon"></div><div class="ig-feed-icon"></div>
+      </div>
+      <div class="ig-feed-post-label">Post 3 — post first</div>
+    </div>
+  </div>
+
+  <div class="download-row">
+    <button onclick="download(1)">Download Post 1</button>
+    <button onclick="download(2)">Download Post 2</button>
+    <button onclick="download(3)">Download Post 3</button>
+    <button onclick="downloadAll()">Download All</button>
+  </div>
+
+  <div class="note">
+    Each file is 1080 &times; 1350px (4:5 portrait).<br>
+    Post 3 first &rarr; Post 2 &rarr; Post 1 last.
+  </div>
+  <div id="debug" style="text-align:center;font-size:11px;color:#555;margin-top:20px;"></div>
+
+  <script>
+    const W = 1080;           // tile width
+    const H = 1350;           // tile height (4:5 portrait)
+    const SPLIT = 0.50;       // 50/50 terracotta and image
+    const TERRACOTTA = '#954d14';
+    const DOT_COLOR = '#0408FF';
+    const DOT_RADIUS = 2.5;
+    const DOT_SPACING = 24;
+    const FONT_SIZE = 150;
+    const LINE_THICKNESS = 14;
+    const LINE_MARGIN = 40;
+
+    const heroImg = new Image();
+    heroImg.crossOrigin = 'anonymous';
+    heroImg.src = 'images/hero.jpg';
+
+    const dbg = document.getElementById('debug');
+    dbg.textContent = 'Loading font and image...';
+
+    const salmondFont = new FontFace('Salmond', "url('fonts/Salmond-Semibold.woff')");
+    const fontPromise = salmondFont.load().then(font => {
+      document.fonts.add(font);
+      dbg.textContent = 'Font loaded. Waiting for image...';
+    }).catch(err => {
+      dbg.textContent = 'Font failed to load: ' + err.message;
+    });
+
+    const imgPromise = new Promise(resolve => {
+      if (heroImg.complete) resolve();
+      else heroImg.onload = resolve;
+    });
+
+    Promise.all([fontPromise, imgPromise])
+      .then(() => document.fonts.ready)
+      .then(render);
+
+    // Fallback: render after 3s even if font fails
+    setTimeout(() => {
+      if (!window._rendered) render();
+    }, 3000);
+
+    function render() {
+      window._rendered = true;
+      const fullW = W * 3;   // 3240px wide
+      const fullH = H;       // 1350px tall
+      const full = document.createElement('canvas');
+      full.width = fullW;
+      full.height = fullH;
+      const ctx = full.getContext('2d');
+
+      // -- Terracotta top --
+      ctx.fillStyle = TERRACOTTA;
+      const splitY = Math.round(fullH * SPLIT);
+      ctx.fillRect(0, 0, fullW, splitY);
+
+      // -- Hero image bottom --
+      const bottomH = fullH - splitY;
+      const imgAspect = heroImg.naturalWidth / heroImg.naturalHeight;
+      const targetAspect = fullW / bottomH;
+      let sx, sy, sw, sh;
+      if (imgAspect > targetAspect) {
+        sh = heroImg.naturalHeight;
+        sw = sh * targetAspect;
+        sx = (heroImg.naturalWidth - sw) / 2;
+        sy = 0;
+      } else {
+        sw = heroImg.naturalWidth;
+        sh = sw / targetAspect;
+        sx = 0;
+        sy = (heroImg.naturalHeight - sh) / 2;
+      }
+      ctx.drawImage(heroImg, sx, sy, sw, sh, 0, splitY, fullW, bottomH);
+
+      // -- Blue dot overlay --
+      ctx.fillStyle = DOT_COLOR;
+      for (let y = DOT_SPACING / 2; y < fullH; y += DOT_SPACING) {
+        for (let x = DOT_SPACING / 2; x < fullW; x += DOT_SPACING) {
+          ctx.beginPath();
+          ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      // -- Wordmark (centered on the terracotta/image split) --
+      const wordY = splitY;
+      ctx.font = '600 ' + FONT_SIZE + 'px Salmond';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.textBaseline = 'middle';
+
+      const studioW = ctx.measureText('Studio').width;
+      const plaistedW = ctx.measureText('Plaisted').width;
+
+      // Edge padding: generous to survive Instagram's grid crop + any extra margins
+      const edgePadding = 220;
+      const studioX = edgePadding;
+      const plaistedX = fullW - plaistedW - edgePadding;
+
+      // Line between words
+      const lineStartX = studioX + studioW + LINE_MARGIN;
+      const lineEndX = plaistedX - LINE_MARGIN;
+
+      // Draw Studio
+      ctx.fillText('Studio', studioX, wordY);
+
+      // Draw line
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(lineStartX, wordY - LINE_THICKNESS / 2, lineEndX - lineStartX, LINE_THICKNESS);
+
+      // Draw Plaisted
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText('Plaisted', plaistedX, wordY);
+
+      // Debug info
+      const fontLoaded = document.fonts.check('600 ' + FONT_SIZE + 'px Salmond');
+      dbg.textContent = 'Font: ' + (fontLoaded ? 'Salmond loaded' : 'FALLBACK (font not loaded!)') +
+        ' | Studio: ' + Math.round(studioW) + 'px | Plaisted: ' + Math.round(plaistedW) + 'px' +
+        ' | Edge padding: ' + edgePadding + 'px | Grid crop ~34px/side → ' + (edgePadding - 34) + 'px visible';
+
+      // -- Slice into 3 tiles --
+      const targets = ['tile', 'grid', 'feed'];
+      for (let i = 0; i < 3; i++) {
+        targets.forEach(prefix => {
+          const el = document.getElementById(prefix + (i + 1));
+          if (el) {
+            const tctx = el.getContext('2d');
+            tctx.drawImage(full, i * W, 0, W, H, 0, 0, W, H);
+          }
+        });
+      }
+    }
+
+    function download(n) {
+      const canvas = document.getElementById('tile' + n);
+      const link = document.createElement('a');
+      link.download = 'studio-plaisted-ig-' + n + '.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    function downloadAll() {
+      for (let i = 1; i <= 3; i++) {
+        setTimeout(() => download(i), i * 300);
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -2,3 +2,10 @@ node_modules/
 server.js
 .DS_Store
 Thumbs.db
+
+# Local Netlify folder
+.netlify
+
+# Editor/CLI state
+.claude/
+deno.lock
